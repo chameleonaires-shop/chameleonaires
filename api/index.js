@@ -7,6 +7,7 @@ const reviewsRouter = require("./Reviews");
 const jwt = require("jsonwebtoken");
 const { getUserById } = require("../db");
 const { JWT_SECRET } = process.env;
+const {client}=require("../db/client")
 
 apiRouter.get("/", (req, res, next) => {
   res.send({
@@ -45,12 +46,12 @@ apiRouter.use((req, res, next) => {
 });
 
 // place your routers here
-apiRouter.use((error, req, res, next) => {
-  res.send({ name: error.name, message: error.message });
-});
-
 apiRouter.use("/users", usersRouter);
 apiRouter.use("/products", productsRouter);
 apiRouter.use("/orders", ordersRouter);
 apiRouter.use("/reviews", reviewsRouter);
+apiRouter.use((error, req, res, next) => {
+  res.send({ name: error.name, message: error.message });
+});
+
 module.exports = apiRouter;

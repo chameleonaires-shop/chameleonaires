@@ -1,6 +1,6 @@
-const client = require("../client");
+const {client} = require("../client");
 const bcrypt = require("bcrypt");
-
+//const { rows } = require("pg/lib/defaults");
 async function getAllUsers() {
   try {
     const {
@@ -18,17 +18,12 @@ async function createUser({ username, password, email }) {
   try {
     const SALT_COUNT = 10;
     const hashedPassword = await bcrypt.hash(password, SALT_COUNT);
-    const {
-      rows: [user],
-    } = await client.query(
-      `
-    INSERT INTO users(username, password,email)
-    VALUES($1,$2,$3)
-    ON CONFLICT (username) DO NOTHING
-    RETURNING *;
-    `,
-      [username, hashedPassword, email]
-    );
+    const {rows: [user]} = await client.query(`
+      INSERT INTO users(username, password,email)
+      VALUES($1,$2,$3)
+      ON CONFLICT (username) DO NOTHING
+      RETURNING *;
+      `,[username, password, email]);
     delete user.hashedPassword;
     delete user.password;
     return user;
