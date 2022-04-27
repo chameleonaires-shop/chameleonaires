@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import { loginUser } from "../axios-services";
 
 const Login = ({
+  user,
   setUser,
   username,
   setUsername,
   password,
   setPassword,
+  isLoggedIn,
   setIsLoggedIn,
+  token,
   setToken,
 }) => {
   // the message to be displayed is the message received from the server
@@ -15,11 +18,12 @@ const Login = ({
   const [clickedSubmit, setClickedSubmit] = useState(false);
 
   return (
-    <div className="registration-page">
-      <h2>Welcome Back to the Chameleonaires' Reptile Shop!</h2>
-      <div className="form-container">
-        <form
-          onSubmit={async (e) => {
+    <div className="registrationPage">
+      <h1>Welcome Back to the Chameleonaires' Reptile Shop!</h1>
+      <div className="formContainer">
+        <form>
+          onSubmit=
+          {async (e) => {
             e.preventDefault();
             try {
               const response = await loginUser(username, password);
@@ -37,12 +41,11 @@ const Login = ({
               console.error("There was a problem with your login.", error);
             }
           }}
-        >
           <label>Username</label>
           <input
             type="text"
-            value={username}
             placeholder="Username"
+            value={username}
             onChange={(e) => {
               setUsername(e.target.value);
             }}
@@ -58,9 +61,6 @@ const Login = ({
           />
           <button type="submit">Login</button>
         </form>
-        <span className="registration-confirm">
-          {clickedSubmit ? <p>{message}</p> : null}
-        </span>
       </div>
     </div>
   );
